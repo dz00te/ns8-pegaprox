@@ -13,7 +13,7 @@ images=()
 # The image will be pushed to GitHub container registry
 repobase="${REPOBASE:-ghcr.io/dz00te}"
 # Configure the image name
-reponame="ns8-pegaprox"
+reponame="pegaprox"
 
 # Create a new empty container image
 container=$(buildah from scratch)

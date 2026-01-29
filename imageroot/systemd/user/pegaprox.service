@@ -1,0 +1,30 @@
+#
+# Copyright (C) 2022 Nethesis S.r.l.
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+
+#
+# This systemd unit starts a pegaprox instance using Podman.
+# Most parts of this file come from podman-generate-systemd.
+#
+
+[Unit]
+Description=Podman pegaprox.service
+Requires=pegaprox-app.service 
+Before=pegaprox-app.service 
+
+[Service]
+Environment=PODMAN_SYSTEMD_UNIT=%n
+EnvironmentFile=-%S/state/environment
+Restart=always
+TimeoutStopSec=70
+ExecStartPre=/bin/rm -f %t/pegaprox.pid %t/pegaprox.pod-id
+ExecStartPre=/usr/bin/podman pod create --infra-conmon-pidfile %t/pegaprox.pid  --pod-id-file %t/pegaprox.pod-id  --name pegaprox  --publish 127.0.0.1:${TCP_PORT}:5000  --replace
+ExecStart=/usr/bin/podman pod start --pod-id-file %t/pegaprox.pod-id
+ExecStop=/usr/bin/podman pod stop --ignore --pod-id-file %t/pegaprox.pod-id -t 10
+ExecStopPost=/usr/bin/podman pod rm --ignore -f --pod-id-file %t/pegaprox.pod-id
+PIDFile=%t/pegaprox.pid
+Type=forking
+
+[Install]
+WantedBy=default.target
