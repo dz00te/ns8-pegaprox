@@ -1,4 +1,4 @@
-# ns8-ns8-pegaprox
+# ns8-pegaprox
 
 This is a template module for [NethServer 8](https://github.com/NethServer/ns8-core).
 To start a new module from it:
