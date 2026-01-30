@@ -18,13 +18,28 @@
         "app_instance": "Istanza app",
         "app_volumes": "Volume app|Volumi app",
         "installation_node": "Nodo",
-        "mount": "Percorso di mount"
+        "mount": "Percorso di mount",
+        "pegaprox_webapp": "Applicazione Web PegaProx",
+        "not_configured": "Non configurato",
+        "open_webapp": "Apri PegaProx",
+        "configure": "Configura"
     },
     "settings": {
         "save": "Salva",
         "title": "Impostazioni",
         "configure_instance": "Configura {instance}",
-        "test_field": "Campo di test"
+        "test_field": "Campo di test",
+        "pegaprox_fqdn": "Nome host PegaProx (FQDN)",
+        "lets_encrypt": "Richiedi certificato Let's Encrypt",
+        "http_to_https": "Forza HTTPS",
+        "enabled": "Abilitato",
+        "disabled": "Disabilitato",
+        "advanced": "Avanzate",
+        "configuring": "Configurazione in corso",
+        "instance_configuration": "Configura PegaProx",
+        "domain_already_used_in_traefik": "Dominio già in uso in Traefik",
+        "host_pattern": "Deve essere un nome di dominio completo valido",
+        "host_format": "Deve essere un nome di dominio completo valido"
     },
     "error": {
         "error": "Errore",

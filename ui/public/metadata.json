@@ -1,19 +1,21 @@
 {
-  "name": "pegaprox",
+  "name": "PegaProx",
+  "upstream_name": "PegaProx 0.6.2",
   "description": {
-    "en": "My pegaprox module"
+    "en": "Multi-cluster management solution for Proxmox VE",
+    "it": "Soluzione di gestione multi-cluster per Proxmox VE"
   },
-  "categories": [],
+  "categories": ["administration"],
   "authors": [
     {
-      "name": "Name Surname",
-      "email": "author@yourmail.org"
+      "name": "dz00te",
+      "email": "your@email.com"
     }
   ],
   "docs": {
     "documentation_url": "https://docs.pegaprox.com/",
-    "bug_url": "https://github.com/NethServer/dev",
-    "code_url": "https://github.com/author/ns8-pegaprox"
+    "bug_url": "https://github.com/dz00te/ns8-pegaprox/issues",
+    "code_url": "https://github.com/dz00te/ns8-pegaprox"
   },
-  "source": "ghcr.io/nethserver/pegaprox"
+  "source": "ghcr.io/dz00te/pegaprox"
 }
