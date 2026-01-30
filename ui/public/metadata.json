@@ -5,11 +5,11 @@
     "en": "Multi-cluster management solution for Proxmox VE",
     "it": "Soluzione di gestione multi-cluster per Proxmox VE"
   },
-  "categories": ["administration"],
+  "categories": ["system_administration"],
   "authors": [
     {
       "name": "dz00te",
-      "email": "your@email.com"
+      "email": "dz00te@framassa.org"
     }
   ],
   "docs": {
