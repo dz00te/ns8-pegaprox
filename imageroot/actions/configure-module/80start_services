@@ -13,5 +13,5 @@ exec 1>&2
 
 touch smarthost.env
 
-systemctl --user enable ns8-pegaprox.service
-systemctl --user restart ns8-pegaprox.service
+systemctl --user enable pegaprox.service
+systemctl --user restart pegaprox.service

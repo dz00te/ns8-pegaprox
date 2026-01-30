@@ -7,6 +7,6 @@
 
 set -e
 
-if ! systemctl --user -q is-active ns8-pegaprox.service; then
+if ! systemctl --user -q is-active pegaprox.service; then
 	exit 0
 fi

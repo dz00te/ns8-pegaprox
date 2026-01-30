@@ -1,7 +1,7 @@
 {
-  "name": "ns8-pegaprox",
+  "name": "pegaprox",
   "description": {
-    "en": "My ns8-pegaprox module"
+    "en": "My pegaprox module"
   },
   "categories": [],
   "authors": [
@@ -11,9 +11,9 @@
     }
   ],
   "docs": {
-    "documentation_url": "https://docs.ns8-pegaprox.com/",
+    "documentation_url": "https://docs.pegaprox.com/",
     "bug_url": "https://github.com/NethServer/dev",
-    "code_url": "https://github.com/author/ns8-ns8-pegaprox"
+    "code_url": "https://github.com/author/ns8-pegaprox"
   },
-  "source": "ghcr.io/nethserver/ns8-pegaprox"
+  "source": "ghcr.io/nethserver/pegaprox"
 }

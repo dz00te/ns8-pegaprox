@@ -18,17 +18,17 @@ reponame="pegaprox"
 # Create a new empty container image
 container=$(buildah from scratch)
 
-# Reuse existing nodebuilder-ns8-pegaprox container, to speed up builds
-if ! buildah containers --format "{{.ContainerName}}" | grep -q nodebuilder-ns8-pegaprox; then
+# Reuse existing nodebuilder-pegaprox container, to speed up builds
+if ! buildah containers --format "{{.ContainerName}}" | grep -q nodebuilder-pegaprox; then
     echo "Pulling NodeJS runtime..."
-    buildah from --name nodebuilder-ns8-pegaprox -v "${PWD}:/usr/src:Z" docker.io/library/node:lts
+    buildah from --name nodebuilder-pegaprox -v "${PWD}:/usr/src:Z" docker.io/library/node:lts
 fi
 
 echo "Build static UI files with node..."
 buildah run \
     --workingdir=/usr/src/ui \
     --env="NODE_OPTIONS=--openssl-legacy-provider" \
-    nodebuilder-ns8-pegaprox \
+    nodebuilder-pegaprox \
     sh -c "yarn install && yarn build"
 
 # Add imageroot directory to the container image

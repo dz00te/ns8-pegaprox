@@ -1,9 +1,9 @@
-# ns8-pegaprox
+# pegaprox
 
 This is a template module for [NethServer 8](https://github.com/NethServer/ns8-core).
 To start a new module from it:
 
-1. Click on [Use this template](https://github.com/NethServer/ns8-ns8-pegaprox/generate).
+1. Click on [Use this template](https://github.com/NethServer/ns8-pegaprox/generate).
    Name your repo with `ns8-` prefix (e.g. `ns8-mymodule`). 
    Do not end your module name with a number, like ~~`ns8-baaad2`~~!
 
@@ -13,10 +13,10 @@ To start a new module from it:
 1. Rename some references inside the repo:
    ```
    modulename=$(basename $(pwd) | sed 's/^ns8-//') &&
-   git mv imageroot/systemd/user/ns8-pegaprox.service imageroot/systemd/user/${modulename}.service &&
-   git mv imageroot/systemd/user/ns8-pegaprox-app.service imageroot/systemd/user/${modulename}-app.service && 
-   git mv tests/ns8-pegaprox.robot tests/${modulename}.robot &&
-   sed -i "s/ns8-pegaprox/${modulename}/g" $(find .github/ * -type f) &&
+   git mv imageroot/systemd/user/pegaprox.service imageroot/systemd/user/${modulename}.service &&
+   git mv imageroot/systemd/user/pegaprox-app.service imageroot/systemd/user/${modulename}-app.service && 
+   git mv tests/pegaprox.robot tests/${modulename}.robot &&
+   sed -i "s/pegaprox/${modulename}/g" $(find .github/ * -type f) &&
    git commit -a -m "Repository initialization"
    ```
 
@@ -33,16 +33,16 @@ To start a new module from it:
 
 Instantiate the module with:
 
-    add-module ghcr.io/nethserver/ns8-pegaprox:latest 1
+    add-module ghcr.io/nethserver/pegaprox:latest 1
 
 The output of the command will return the instance name.
 Output example:
 
-    {"module_id": "ns8-pegaprox1", "image_name": "ns8-pegaprox", "image_url": "ghcr.io/nethserver/ns8-pegaprox:latest"}
+    {"module_id": "pegaprox1", "image_name": "pegaprox", "image_url": "ghcr.io/nethserver/pegaprox:latest"}
 
 ## Configure
 
-Let's assume that the mattermost instance is named `ns8-pegaprox1`.
+Let's assume that the mattermost instance is named `pegaprox1`.
 
 Launch `configure-module`, by setting the following parameters:
 - `host`: a fully qualified domain name for the application
@@ -53,9 +53,9 @@ Launch `configure-module`, by setting the following parameters:
 Example:
 
 ```
-api-cli run configure-module --agent module/ns8-pegaprox1 --data - <<EOF
+api-cli run configure-module --agent module/pegaprox1 --data - <<EOF
 {
-  "host": "ns8-pegaprox.domain.com",
+  "host": "pegaprox.domain.com",
   "http2https": true,
   "lets_encrypt": false
 }
@@ -63,21 +63,21 @@ EOF
 ```
 
 The above command will:
-- start and configure the ns8-pegaprox instance
+- start and configure the pegaprox instance
 - configure a virtual host for trafik to access the instance
 
 ## Get the configuration
 You can retrieve the configuration with
 
 ```
-api-cli run get-configuration --agent module/ns8-pegaprox1
+api-cli run get-configuration --agent module/pegaprox1
 ```
 
 ## Uninstall
 
 To uninstall the instance:
 
-    remove-module --no-preserve ns8-pegaprox1
+    remove-module --no-preserve pegaprox1
 
 ## Smarthost setting discovery
 
@@ -86,14 +86,14 @@ Some configuration settings, like the smarthost setup, are not part of the
 Redis keys.  To ensure the module is always up-to-date with the
 centralized [smarthost
 setup](https://nethserver.github.io/ns8-core/core/smarthost/) every time
-ns8-pegaprox starts, the command `bin/discover-smarthost` runs and refreshes
+pegaprox starts, the command `bin/discover-smarthost` runs and refreshes
 the `state/smarthost.env` file with fresh values from Redis.
 
-Furthermore if smarthost setup is changed when ns8-pegaprox is already
+Furthermore if smarthost setup is changed when pegaprox is already
 running, the event handler `events/smarthost-changed/10reload_services`
 restarts the main module service.
 
-See also the `systemd/user/ns8-pegaprox.service` file.
+See also the `systemd/user/pegaprox.service` file.
 
 This setting discovery is just an example to understand how the module is
 expected to work: it can be rewritten or discarded completely.
@@ -102,46 +102,46 @@ expected to work: it can be rewritten or discarded completely.
 
 some CLI are needed to debug
 
-- The module runs under an agent that initiate a lot of environment variables (in /home/ns8-pegaprox1/.config/state), it could be nice to verify them
+- The module runs under an agent that initiate a lot of environment variables (in /home/pegaprox1/.config/state), it could be nice to verify them
 on the root terminal
 
-    `runagent -m ns8-pegaprox1 env`
+    `runagent -m pegaprox1 env`
 
 - you can become runagent for testing scripts and initiate all environment variables
   
-    `runagent -m ns8-pegaprox1`
+    `runagent -m pegaprox1`
 
  the path become : 
 ```
     echo $PATH
-    /home/ns8-pegaprox1/.config/bin:/usr/local/agent/pyenv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/usr/
+    /home/pegaprox1/.config/bin:/usr/local/agent/pyenv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/usr/
 ```
 
 - if you want to debug a container or see environment inside
- `runagent -m ns8-pegaprox1`
+ `runagent -m pegaprox1`
  ```
 podman ps
 CONTAINER ID  IMAGE                                      COMMAND               CREATED        STATUS        PORTS                    NAMES
 d292c6ff28e9  localhost/podman-pause:4.6.1-1702418000                          9 minutes ago  Up 9 minutes  127.0.0.1:20015->80/tcp  80b8de25945f-infra
 d8df02bf6f4a  docker.io/library/mariadb:10.11.5          --character-set-s...  9 minutes ago  Up 9 minutes  127.0.0.1:20015->80/tcp  mariadb-app
-9e58e5bd676f  docker.io/library/nginx:stable-alpine3.17  nginx -g daemon o...  9 minutes ago  Up 9 minutes  127.0.0.1:20015->80/tcp  ns8-pegaprox-app
+9e58e5bd676f  docker.io/library/nginx:stable-alpine3.17  nginx -g daemon o...  9 minutes ago  Up 9 minutes  127.0.0.1:20015->80/tcp  pegaprox-app
 ```
 
 you can see what environment variable is inside the container
 ```
-podman exec  ns8-pegaprox-app env
+podman exec  pegaprox-app env
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 TERM=xterm
 PKG_RELEASE=1
 MARIADB_DB_HOST=127.0.0.1
-MARIADB_DB_NAME=ns8-pegaprox
+MARIADB_DB_NAME=pegaprox
 MARIADB_IMAGE=docker.io/mariadb:10.11.5
 MARIADB_DB_TYPE=mysql
 container=podman
 NGINX_VERSION=1.24.0
 NJS_VERSION=0.7.12
-MARIADB_DB_USER=ns8-pegaprox
-MARIADB_DB_PASSWORD=ns8-pegaprox
+MARIADB_DB_USER=pegaprox
+MARIADB_DB_PASSWORD=pegaprox
 MARIADB_DB_PORT=3306
 HOME=/root
 ```
@@ -149,7 +149,7 @@ HOME=/root
 you can run a shell inside the container
 
 ```
-podman exec -ti   ns8-pegaprox-app sh
+podman exec -ti   pegaprox-app sh
 / # 
 ```
 ## Testing
@@ -157,7 +157,7 @@ podman exec -ti   ns8-pegaprox-app sh
 Test the module using the `test-module.sh` script:
 
 
-    ./test-module.sh <NODE_ADDR> ghcr.io/nethserver/ns8-pegaprox:latest
+    ./test-module.sh <NODE_ADDR> ghcr.io/nethserver/pegaprox:latest
 
 The tests are made using [Robot Framework](https://robotframework.org/)
 

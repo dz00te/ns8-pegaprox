@@ -24,8 +24,8 @@
         <cv-tile light>
           <cv-form @submit.prevent="configureModule">
             <cv-text-input
-              :label="$t('settings.ns8-pegaprox_fqdn')"
-              placeholder="ns8-pegaprox.example.org"
+              :label="$t('settings.pegaprox_fqdn')"
+              placeholder="pegaprox.example.org"
               v-model.trim="host"
               class="mg-bottom"
               :invalid-message="$t(error.host)"
