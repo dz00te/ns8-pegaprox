@@ -33,3 +33,6 @@ response = agent.tasks.run(
 
 # Check if traefik configuration has been successfull
 agent.assert_exp(response['exit_code'] == 0)
+
+# Remove podman volumes
+agent.run_helper('podman', 'volume', 'rm', '-f', 'pegaprox-config')
