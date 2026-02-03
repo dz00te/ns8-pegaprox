@@ -1,6 +1,6 @@
 {
   "name": "PegaProx",
-  "upstream_name": "PegaProx 0.6.3",
+  "upstream_name": "PegaProx 0.6.4",
   "description": {
     "en": "Multi-cluster management solution for Proxmox VE",
     "it": "Soluzione di gestione multi-cluster per Proxmox VE"
