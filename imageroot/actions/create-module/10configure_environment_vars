@@ -29,3 +29,7 @@ def generate_random_password(length):
 
 # Create podman volume for persistent config (SQLite DB, SSL certs, etc.)
 agent.run_helper('podman', 'volume', 'create', 'pegaprox-config').check_returncode()
+
+# Set default Traefik environment
+agent.set_env("TRAEFIK_HTTP2HTTPS", str(True))
+agent.set_env("TRAEFIK_LETS_ENCRYPT", str(False))
