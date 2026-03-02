@@ -1,4 +1,6 @@
 #!/bin/bash
 cp -f "${AGENT_INSTALL_DIR}/systemd/user/pegaprox-app.service" \
     "${HOME}/.config/systemd/user/pegaprox-app.service"
+cp -f "${AGENT_INSTALL_DIR}/systemd/user/pegaprox.service" \
+    "${HOME}/.config/systemd/user/pegaprox.service"
 systemctl --user daemon-reload
