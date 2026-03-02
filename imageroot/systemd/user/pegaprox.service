@@ -19,8 +19,7 @@ EnvironmentFile=-%S/state/environment
 Restart=always
 TimeoutStopSec=70
 ExecStartPre=/bin/rm -f %t/pegaprox.pid %t/pegaprox.pod-id
-ExecStartPre=/bin/bash -c 'echo "VNC_PORT=$((TCP_PORT+1))" > %S/state/console-ports.env && echo "SSH_PORT=$((TCP_PORT+2))" >> %S/state/console-ports.env'
-ExecStartPre=/bin/bash -c '. %S/state/console-ports.env; /usr/bin/podman pod create --infra-conmon-pidfile %t/pegaprox.pid --pod-id-file %t/pegaprox.pod-id --name pegaprox --publish 127.0.0.1:${TCP_PORT}:5000 --publish $$VNC_PORT:5001 --publish $$SSH_PORT:5002 --replace'
+ExecStartPre=/bin/bash -c 'VNC=$((TCP_PORT+1)); SSH=$((TCP_PORT+2)); /usr/bin/podman pod create --infra-conmon-pidfile %t/pegaprox.pid --pod-id-file %t/pegaprox.pod-id --name pegaprox --publish 127.0.0.1:${TCP_PORT}:5000 --publish $VNC:5001 --publish $SSH:5002 --replace'
 ExecStart=/usr/bin/podman pod start --pod-id-file %t/pegaprox.pod-id
 ExecStop=/usr/bin/podman pod stop --ignore --pod-id-file %t/pegaprox.pod-id -t 10
 ExecStopPost=/usr/bin/podman pod rm --ignore -f --pod-id-file %t/pegaprox.pod-id
