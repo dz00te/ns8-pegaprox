@@ -18,7 +18,7 @@ TimeoutStopSec=70
 ExecStartPre=/bin/mkdir -p tmp
 ExecStartPre=/bin/rm -f %t/pegaprox-app.pid %t/pegaprox-app.ctr-id
 ExecStartPre=/bin/bash -c "test -s %S/state/ssl/cert.pem || (mkdir -p %S/state/ssl && openssl req -x509 -newkey rsa:2048 -nodes -keyout %S/state/ssl/key.pem -out %S/state/ssl/cert.pem -days 3650 -subj /CN=pegaprox)"
-ExecStart=/usr/bin/podman run --conmon-pidfile %t/pegaprox-app.pid  --cidfile %t/pegaprox-app.ctr-id --cgroups=no-conmon  --pod-id-file %t/pegaprox.pod-id --replace -d --name  pegaprox-app  --user 0:0  --volume pegaprox-config:/app/config:Z --volume %S/state/ssl:/app/ssl:Z --env-file pegaprox.env  ${PEGAPROX_IMAGE}
+ExecStart=/usr/bin/podman run --conmon-pidfile %t/pegaprox-app.pid  --cidfile %t/pegaprox-app.ctr-id --cgroups=no-conmon  --pod-id-file %t/pegaprox.pod-id --replace -d --name  pegaprox-app  --user 0:0  --volume pegaprox-config:/app/config:Z --volume %S/state/ssl:/app/ssl:Z --env-file pegaprox.env --env PEGAPROX_HOST=0.0.0.0  ${PEGAPROX_IMAGE}
 ExecStop=/usr/bin/podman stop --ignore --cidfile %t/pegaprox-app.ctr-id -t 10
 ExecReload=/usr/bin/podman kill -s HUP pegaprox-app
 SyslogIdentifier=%u
