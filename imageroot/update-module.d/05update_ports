@@ -6,31 +6,16 @@
 # Ensure 3 TCP ports are allocated for pegaprox (main + VNC WS + SSH WS)
 #
 import agent
-import agent.tasks
 import os
 
-module_id = os.environ['MODULE_ID']
-tcp_port = int(os.environ.get('TCP_PORT', 0))
 tcp_ports = os.environ.get('TCP_PORTS', '')
 
 if tcp_ports.count(',') < 2:  # less than 3 ports
-    print(f"Expanding port allocation for {module_id} to 3 ports")
-    result = agent.tasks.run(
-        agent_id='node/1',
-        action='allocate-ports',
-        data={
-            'module_id': module_id,
-            'ports': 3,
-            'protocol': 'tcp',
-            'keep_existing': False
-        }
-    )
-    if result['exit_code'] == 0:
-        new_start = result['output'][0]
-        agent.set_env('TCP_PORT', str(new_start))
-        agent.set_env('TCP_PORTS', f'{new_start},{new_start+1},{new_start+2}')
-        print(f"Port allocation updated: {new_start}-{new_start+2}")
-    else:
-        print(f"WARNING: Failed to update port allocation: {result['error']}")
+    print("Expanding port allocation to 3 ports")
+    result = agent.allocate_ports(3, "tcp")
+    new_start = result[0]
+    agent.set_env('TCP_PORT', str(new_start))
+    agent.set_env('TCP_PORTS', f'{new_start},{new_start+1},{new_start+2}')
+    print(f"Port allocation updated: {new_start}-{new_start+2}")
 else:
     print(f"Port allocation already correct: {tcp_ports}")
