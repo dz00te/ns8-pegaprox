@@ -9,7 +9,7 @@ Install via Software center:
 
 Install from CLI:
 
-    add-module ghcr.io/dz00te/pegaprox:0.0.3
+    add-module ghcr.io/dz00te/pegaprox:0.0.13
 
 ## Configure
 

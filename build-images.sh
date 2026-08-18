@@ -45,7 +45,7 @@ buildah config --entrypoint=/ \
     --label="org.nethserver.authorizations=traefik@node:routeadm node:portsadm" \
     --label="org.nethserver.tcp-ports-demand=3" \
     --label="org.nethserver.rootfull=0" \
-    --label="org.nethserver.images=ghcr.io/pegaprox/pegaprox:1.0.1" \
+    --label="org.nethserver.images=ghcr.io/pegaprox/pegaprox:1.0.2" \
     "${container}"
 # Commit the image
 buildah commit "${container}" "${repobase}/${reponame}"
