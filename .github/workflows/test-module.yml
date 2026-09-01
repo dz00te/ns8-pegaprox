@@ -1,5 +1,4 @@
 name: Test module
-
 on:
   workflow_dispatch:
     inputs:
@@ -10,7 +9,6 @@ on:
   workflow_run:
     workflows: ["Publish images"]
     types: [completed]
-
 jobs:
   module:
     if: ${{ github.event.workflow_run.conclusion == 'success' || github.event.workflow_run.conclusion == '' }}
