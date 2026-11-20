@@ -4,12 +4,16 @@
 
 ## Install
 
-Install via Software center:
-  - Add a Software repository pointing to `https://forge.dzlab.net/ns8/updates/`, check out the [repository website](https://forge.dzlab.net/) for instructions.
+Install from the Software Center: in cluster-admin, add a software repository
+named `dz00te` with URL `https://forge.dzlab.net/ns8/updates/` (see the
+[repository website](https://forge.dzlab.net/) for instructions), then install
+PegaProx from the Software Center.
 
-Install from CLI:
+Install from CLI, replacing `<version>` with the
+[latest release](https://github.com/dz00te/ns8-pegaprox/releases/latest)
+(e.g. `0.2.1`) and `1` with the ID of the target node:
 
-    add-module ghcr.io/dz00te/pegaprox:0.1.1
+    add-module ghcr.io/dz00te/pegaprox:<version> 1
 
 ## Configure
 
