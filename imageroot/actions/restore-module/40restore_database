@@ -29,6 +29,11 @@ if [[ -e "${dump_dir}/pegaprox.db" ]]; then
     exit 0
 fi
 
+if ! podman unshare test -e "${volume}/.admin_initialized"; then
+    echo "PegaProx was never configured: nothing to restore"
+    exit 0
+fi
+
 # Snapshots taken before module-dump-state existed: the database was
 # copied by restic while the service was running
 if podman unshare test -e "${volume}/pegaprox.db"; then
@@ -36,9 +41,5 @@ if podman unshare test -e "${volume}/pegaprox.db"; then
     exit 0
 fi
 
-if podman unshare test -e "${volume}/.admin_initialized"; then
-    echo "[ERROR] PegaProx is configured but the snapshot contains no database"
-    exit 1
-fi
-
-echo "PegaProx was never configured: no database to restore"
+echo "[ERROR] PegaProx is configured but the snapshot contains no database"
+exit 1
