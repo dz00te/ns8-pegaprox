@@ -4,3 +4,13 @@
 # Copyright (C) 2022 Nethesis S.r.l.
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
+
+#
+# Remove the database copy created by module-dump-state. The copied
+# files keep the subuid owner of the volume: remove them with podman unshare.
+#
+
+set -e
+exec 1>&2 # Redirect any output to the journal (stderr)
+
+podman unshare rm -rf db-dump

@@ -5,5 +5,41 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
 
+#
+# Put the database copy saved by module-dump-state back into the
+# pegaprox-config volume, that 10restore restored without the live
+# database files (see etc/state-exclude.conf). This step must complete
+# before 50traefik, which starts the services through configure-module.
+# The volume files belong to a subuid: access them with podman unshare.
+#
+
 set -e -o pipefail
 exec 1>&2 # Redirect any output to the journal (stderr)
+
+dump_dir=db-dump
+volume=$(podman volume inspect pegaprox-config --format '{{.Mountpoint}}')
+
+if [[ -e "${dump_dir}/pegaprox.db" ]]; then
+    # A WAL file that does not belong to the dump would make the copied
+    # database inconsistent
+    podman unshare rm -f "${volume}"/pegaprox.db-wal "${volume}"/pegaprox.db-shm \
+        "${volume}"/syslog.db-wal "${volume}"/syslog.db-shm
+    podman unshare cp -pv "${dump_dir}"/* "${volume}/"
+    podman unshare rm -rf "${dump_dir}"
+    exit 0
+fi
+
+if ! podman unshare test -e "${volume}/.admin_initialized"; then
+    echo "PegaProx was never configured: nothing to restore"
+    exit 0
+fi
+
+# Snapshots taken before module-dump-state existed: the database was
+# copied by restic while the service was running
+if podman unshare test -e "${volume}/pegaprox.db"; then
+    echo "[WARNING] legacy snapshot without ${dump_dir}: hot copy of the database restored, consistency not guaranteed"
+    exit 0
+fi
+
+echo "[ERROR] PegaProx is configured but the snapshot contains no database"
+exit 1

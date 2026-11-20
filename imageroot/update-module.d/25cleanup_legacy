@@ -1,0 +1,32 @@
+#!/bin/bash
+
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+
+#
+# Remove the leftovers of previous module versions. Every step is
+# independent and does nothing when there is nothing left to remove, so
+# the script runs safely on every update. It runs after 20restart: the
+# app container already runs with the current unit.
+#
+
+exec 1>&2 # Redirect any output to the journal (stderr)
+
+state_dir=${AGENT_STATE_DIR:?}
+
+# Variables of the pegaprox-app image, no longer in org.nethserver.images
+python3 -c 'import agent; agent.munset_env(["PEGAPROX_APP_IMAGE", "PREV_PEGAPROX_APP_IMAGE"])' || true
+
+# Old pegaprox-app images and untagged images not used by any container
+podman image ls --filter reference=ghcr.io/dz00te/pegaprox-app --format '{{.ID}}' | sort -u | xargs -r podman image rm || true
+podman image prune -f || true
+
+# Certificate pair of old versions in the state root (now in ssl/) and
+# the pegaprox.env file no longer used by the unit
+rm -vf "${state_dir}"/cert.pem "${state_dir}"/key.pem "${state_dir}"/pegaprox.env || true
+
+# Anonymous volumes not used by any container, e.g. /app/logs before
+# --image-volume=ignore. Named volumes (pegaprox-config, restic-cache)
+# have Anonymous=false and are never removed.
+podman volume ls --filter dangling=true --format '{{.Name}} {{.Anonymous}}' | awk '$2 == "true" {print $1}' | xargs -r podman volume rm || true

@@ -23,11 +23,4 @@ config["http2https"] = os.getenv("TRAEFIK_HTTP2HTTPS") == "True"
 config["lets_encrypt"] = os.getenv("TRAEFIK_LETS_ENCRYPT") == "True"
 
 # Dump the configuration to stdout
-# json.dump(config, fp=sys.stdout)
-if os.path.exists("pegaprox.env"): 
-	data = agent.read_envfile("pegaprox.env") 
-	config["PEGAPROX_CONFIG_DIR"] = data.get("PEGAPROX_CONFIG_DIR", "/app/pegaprox/config") 
-else: 
-	config["PEGAPROX_CONFIG_DIR"] = "/app/pegaprox/config" 
- 
 json.dump(config, fp=sys.stdout)

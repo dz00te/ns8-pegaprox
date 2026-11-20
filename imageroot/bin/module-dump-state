@@ -5,8 +5,51 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
 
-set -e
+#
+# Cold copy of the PegaProx databases into state/db-dump. They are
+# SQLCipher encrypted, so sqlite3 cannot dump them: stop the app, copy
+# the files, start it again. The working directory is the state dir.
+# The volume files belong to a subuid: access them with podman unshare.
+#
 
-if ! systemctl --user -q is-active pegaprox.service; then
-	exit 0
+set -e
+exec 1>&2 # Redirect any output to the journal (stderr)
+
+dump_dir=db-dump
+volume=$(podman volume inspect pegaprox-config --format '{{.Mountpoint}}')
+
+# Remove the dump left by a failed backup
+podman unshare rm -rf "${dump_dir}"
+
+if ! podman unshare test -e "${volume}/.admin_initialized"; then
+    echo "PegaProx was never configured: no database to dump"
+    exit 0
 fi
+
+restart_services ()
+{
+    if ! systemctl --user start pegaprox.service pegaprox-app.service; then
+        echo "[ERROR] cannot start the PegaProx services after the database copy"
+        exit 1
+    fi
+}
+
+# Stop and start the app only if it is running: a service stopped by the
+# administrator stays stopped. The trap runs on any exit, also on errors,
+# and keeps the exit code of the failed command.
+if systemctl --user -q is-active pegaprox-app.service; then
+    trap restart_services EXIT
+    systemctl --user stop pegaprox-app.service
+fi
+
+if ! podman unshare test -e "${volume}/pegaprox.db"; then
+    echo "[ERROR] PegaProx is configured but ${volume}/pegaprox.db is missing"
+    exit 1
+fi
+
+mkdir "${dump_dir}"
+for dbfile in pegaprox.db pegaprox.db-wal syslog.db syslog.db-wal; do
+    if podman unshare test -e "${volume}/${dbfile}"; then
+        podman unshare cp -pv "${volume}/${dbfile}" "${dump_dir}/"
+    fi
+done
