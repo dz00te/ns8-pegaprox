@@ -2,8 +2,8 @@
   "name": "PegaProx",
   "upstream_name": "PegaProx 1.5.0",
   "description": {
-    "en": "Multi-cluster management solution for Proxmox VE",
-    "it": "Soluzione di gestione multi-cluster per Proxmox VE"
+    "en": "Manage several Proxmox VE clusters from a single web interface, with VM consoles, load balancing and replication.",
+    "it": "Gestione di più cluster Proxmox VE da un'unica interfaccia web, con console delle VM, bilanciamento del carico e replica."
   },
   "categories": ["system_administration"],
   "authors": [
